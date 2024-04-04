@@ -1,3 +1,5 @@
+# 用node写一个爬虫，超简单
+
 # 前言
 
 你是否有一个想法，自己设计一个网站，然后去爬取别人家页面的数据来做一个自己的网站。哈哈哈，如果自己写着玩可能没啥事，但如果用这个网站来获利，你可能就要被寄律师函了，毕竟这有点‘刑’。这篇文章呢，就带大家爬取豆瓣TOP250电影的信息。豆瓣电影 Top 250 (douban.com)
@@ -86,24 +88,23 @@ fs.writeFile('./files.json', JSON.stringify(allFiles), function(err, data) {
 # 完整代码
 
 ```js
-
 //引入模块
 const https = require('https')
 const cheerio = require('cheerio')
 const fs = require('fs')
 //获取页面的html结构
-https.get('https://movie.douban.com/top250?start=25', function (res) {
+https.get('https://movie.douban.com/top250?start=25', function(res) {
     let html = ''
-    res.on('data', function (chunk) {
+    res.on('data', function(chunk) {
         //console.log(chunk + '');
         html += chunk
     })
-    res.on('end', function () {
+    res.on('end', function() {
         // 获取html中的数据
         const $ = cheerio.load(html)
         let allFiles = []
         //拿到每一个item中我们需要的数据
-        $('li .item').each(function () {
+        $('li .item').each(function() {
             const title = $('.title', this).text()
             const star = $('.info .bd .rating_num', this).text()
             const pic = $('.pic img', this).attr('src')
@@ -116,7 +117,7 @@ https.get('https://movie.douban.com/top250?start=25', function (res) {
         })
         //console.log(allFiles);
         //将数据写入文件中
-        fs.writeFile('./files2.json', JSON.stringify(allFiles), function (err, data) {
+        fs.writeFile('./files2.json', JSON.stringify(allFiles), function(err, data) {
             if (err) {
                 throw err
             }

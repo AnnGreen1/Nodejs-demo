@@ -1,0 +1,14 @@
+{
+  "name": "auto-reconnect",
+  "version": "1.0.0",
+  "description": "断网自动重连",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "node-wifi": "^2.0.16"
+  }
+}
