@@ -3,25 +3,25 @@ const fs = require('fs');
 
 const wss = new WebSocket.Server({ port: 8080 });
 
-fileStream = fs.createWriteStream('audio.mp3');
-wss.on('connection', function connection(ws) {
-    console.log('Client connected');
-    wss.on('message', function incoming(message) {
-        console.log('received: %s', message);
-        fileStream.write(message);
-    });
-
-    // wss.send('Hello, Client!');
-
+wss.on('connection', (ws) => {
+  ws.on('message', async (data, isBinary) => {
+    if (isBinary) {
+      handleBlob(data);
+    } else {
+      console.error('Received non-binary data, expected Blob.');
+    }
+  });
 });
 
+function handleBlob(binaryData) {
+  const buffer = Buffer.from(binaryData);
+  const outputPath = 'received.mp3';
 
-// wss.on('message', function incoming(message) {
-//     console.log(message);
-//     debugger
-//     fileStream.write(message);
-//     // 手动刷新缓冲区
-//     fileStream.once('drain', function () {
-//         console.log('Data flushed to file');
-//     });
-// });
+  fs.writeFile(outputPath, buffer, (err) => {
+    if (err) {
+      console.error(`Error saving MP3 file: ${err}`);
+    } else {
+      console.log('MP3 file saved successfully.');
+    }
+  });
+}
